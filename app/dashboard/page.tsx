@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Plus, ArrowLeft, Search, ArrowUpDown, Trash2 } from "lucide-react";
 import { Category, Subscription } from "@/lib/types";
@@ -43,6 +43,7 @@ export default function DashboardPage() {
 }
 
 function DashboardContent() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const [subscriptions, setSubscriptions] = useState<Subscription[]>(() => {
     const isDemo = searchParams.get("demo") === "true";
@@ -91,12 +92,15 @@ function DashboardContent() {
     setModalOpen(true);
   }
 
-  function handleClearAll() {
+  function handleStartOver() {
     if (clearConfirm) {
+      saveSubscriptions([]);
       setSubscriptions([]);
       setFilter("all");
       setSearch("");
+      setSort("renewal");
       setClearConfirm(false);
+      router.replace("/dashboard");
       return;
     }
 
@@ -302,12 +306,12 @@ function DashboardContent() {
                 ) : null}
                 {subscriptions.length > 0 && (
                   <button
-                    onClick={handleClearAll}
+                    onClick={handleStartOver}
                     className="flex items-center gap-1.5 text-xs cursor-pointer transition-colors"
                     style={{ color: clearConfirm ? "#ef4444" : "#64748b" }}
                   >
                     <Trash2 size={13} />
-                    {clearConfirm ? "Confirmar vaciado" : "Vaciar lista"}
+                    {clearConfirm ? "Confirmar reinicio" : "Volver a empezar"}
                   </button>
                 )}
               </div>
