@@ -14,6 +14,7 @@ import SubscriptionModal from "@/components/SubscriptionModal";
 import RenewalList from "@/components/RenewalList";
 import ImpactPhrases from "@/components/ImpactPhrases";
 import FilterBar from "@/components/FilterBar";
+import ExportButton from "@/components/ExportButton";
 
 export default function DashboardPage() {
   return (
@@ -153,6 +154,8 @@ function DashboardContent() {
               {formatCurrency(monthly)}
             </span>
           </div>
+
+          <ExportButton subscriptions={subscriptions} />
 
           <button
             onClick={handleAdd}
