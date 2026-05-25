@@ -6,10 +6,8 @@ import {
   formatCurrency,
   getDailyPrice,
   getMostExpensiveCategory,
-  getMostExpensiveSubscription,
   getTotalAnnual,
   getTotalMonthly,
-  toMonthlyPrice,
 } from "@/lib/calculations";
 import { CATEGORY_META } from "@/lib/constants";
 
@@ -51,7 +49,6 @@ export default function StatsCards({ subscriptions }: { subscriptions: Subscript
   const annual = getTotalAnnual(subscriptions);
   const daily = getDailyPrice(subscriptions);
   const mostExpCat = getMostExpensiveCategory(subscriptions);
-  const mostExpSub = getMostExpensiveSubscription(subscriptions);
 
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">

@@ -2,7 +2,7 @@
 
 import { Bell } from "lucide-react";
 import { Subscription } from "@/lib/types";
-import { getDaysUntilRenewal, formatCurrency, toMonthlyPrice } from "@/lib/calculations";
+import { getDaysUntilRenewal, formatCurrency } from "@/lib/calculations";
 import { CATEGORY_META } from "@/lib/constants";
 
 export default function RenewalList({ subscriptions }: { subscriptions: Subscription[] }) {

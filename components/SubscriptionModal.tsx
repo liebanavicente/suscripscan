@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { X } from "lucide-react";
 import { Category, PaymentFrequency, Subscription } from "@/lib/types";
 import { CATEGORIES, CATEGORY_META, FREQUENCY_LABELS } from "@/lib/constants";
@@ -29,23 +29,18 @@ export default function SubscriptionModal({
   onClose,
   onSave,
 }: Props) {
-  const [form, setForm] = useState<Omit<Subscription, "id">>(empty);
+  const [form, setForm] = useState<Omit<Subscription, "id">>(() =>
+    subscription
+      ? {
+          name: subscription.name,
+          category: subscription.category,
+          price: subscription.price,
+          frequency: subscription.frequency,
+          renewalDate: subscription.renewalDate,
+        }
+      : empty
+  );
   const [errors, setErrors] = useState<Partial<Record<keyof Subscription, string>>>({});
-
-  useEffect(() => {
-    if (subscription) {
-      setForm({
-        name: subscription.name,
-        category: subscription.category,
-        price: subscription.price,
-        frequency: subscription.frequency,
-        renewalDate: subscription.renewalDate,
-      });
-    } else {
-      setForm(empty);
-    }
-    setErrors({});
-  }, [subscription, open]);
 
   function validate(): boolean {
     const e: typeof errors = {};
