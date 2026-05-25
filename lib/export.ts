@@ -7,7 +7,7 @@ import {
   getTotalAnnual,
   formatCurrency,
 } from "./calculations";
-import { todayLocalISODate } from "./dates";
+import { formatLongISODate, todayLocalISODate } from "./dates";
 
 // ─── CSV ──────────────────────────────────────────────────────────────────────
 
@@ -120,12 +120,12 @@ export async function exportToPDF(subscriptions: Subscription[]): Promise<void> 
   // Table
   const tableRows = subscriptions.map((s) => [
     s.name,
-    `${CATEGORY_META[s.category].icon} ${CATEGORY_META[s.category].label}`,
+    CATEGORY_META[s.category].label,
     `${s.price.toFixed(2)} €`,
     FREQUENCY_LABELS[s.frequency],
     `${toMonthlyPrice(s).toFixed(2)} €`,
     `${toAnnualPrice(s).toFixed(2)} €`,
-    s.renewalDate,
+    formatLongISODate(s.renewalDate),
   ]);
 
   autoTable(doc, {
@@ -136,8 +136,10 @@ export async function exportToPDF(subscriptions: Subscription[]): Promise<void> 
     styles: {
       fillColor: [20, 20, 32],
       textColor: light,
-      fontSize: 8,
-      cellPadding: 3,
+      fontSize: 7.5,
+      cellPadding: 2.4,
+      overflow: "linebreak",
+      valign: "middle",
     },
     headStyles: {
       fillColor: purple,
@@ -154,10 +156,13 @@ export async function exportToPDF(subscriptions: Subscription[]): Promise<void> 
       fillColor: [25, 25, 40],
     },
     columnStyles: {
-      0: { fontStyle: "bold", cellWidth: 35 },
-      1: { cellWidth: 45 },
+      0: { fontStyle: "bold", cellWidth: 34 },
+      1: { cellWidth: 42 },
+      2: { cellWidth: 21, halign: "right" },
+      3: { cellWidth: 24 },
       4: { textColor: [167, 139, 250] as [number, number, number] },
       5: { textColor: [6, 182, 212] as [number, number, number] },
+      6: { cellWidth: 19 },
     },
     margin: { left: 14, right: 14 },
   });

@@ -35,3 +35,11 @@ export function formatShortISODate(value: string): string {
     month: "short",
   });
 }
+
+export function formatLongISODate(value: string): string {
+  return parseLocalISODate(value).toLocaleDateString("es-ES", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+}

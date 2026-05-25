@@ -187,7 +187,8 @@ function DashboardContent() {
                   type="text"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Buscar suscripción..."
+                  placeholder="Buscar en tus suscripciones..."
+                  aria-label="Buscar en tus suscripciones"
                   className="flex-1 bg-transparent text-sm text-white outline-none placeholder:text-[#334155]"
                 />
               </div>
