@@ -71,75 +71,70 @@ export default function MonthlyCalendar({ subscriptions, expenses }: Props) {
   while (cells.length % 7 !== 0) cells.push(null);
 
   return (
-    <div
-      className="rounded-2xl overflow-hidden"
-      style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)" }}
-    >
+    <div className="card overflow-hidden">
       {/* Header */}
-      <div
-        className="flex items-center justify-between px-5 py-4 border-b"
-        style={{ borderColor: "rgba(255,255,255,0.07)" }}
-      >
+      <div className="flex flex-col gap-4 border-b-[1.5px] border-ink px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-sm font-semibold text-white">
-            {MONTH_NAMES[month]} {year}
+          <p className="label-mono text-ink-faint">Calendario de cobros</p>
+          <h2
+            className="mt-1 font-display text-3xl font-extrabold leading-none tracking-tight"
+            style={{ fontVariationSettings: '"wdth" 85' }}
+          >
+            {MONTH_NAMES[month]} <span className="text-ink-faint">{year}</span>
           </h2>
-          <div className="flex items-center gap-3 mt-0.5">
-            <span className="text-xs" style={{ color: "#64748b" }}>
-              Suscripciones <span style={{ color: "#a7f3d0" }}>{formatCurrency(totalSubsMonth)}</span>
-            </span>
+        </div>
+        <div className="flex items-center gap-5">
+          <div className="flex gap-5 font-mono text-xs">
+            <div>
+              <p className="label-mono text-ink-faint">Suscr.</p>
+              <p className="mt-0.5 text-sm font-medium tabular-nums">{formatCurrency(totalSubsMonth)}</p>
+            </div>
             {totalExpsMonth > 0 && (
-              <span className="text-xs" style={{ color: "#64748b" }}>
-                · Gastos <span style={{ color: "#34d399" }}>{formatCurrency(totalExpsMonth)}</span>
-              </span>
+              <div>
+                <p className="label-mono text-ink-faint">Gastos</p>
+                <p className="mt-0.5 text-sm font-medium tabular-nums text-carbon">{formatCurrency(totalExpsMonth)}</p>
+              </div>
             )}
           </div>
-        </div>
-        <div className="flex items-center gap-1">
-          <button
-            onClick={prevMonth}
-            className="w-8 h-8 flex items-center justify-center rounded-lg transition-colors cursor-pointer"
-            style={{ color: "#475569" }}
-            onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.08)"; e.currentTarget.style.color = "#94a3b8"; }}
-            onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#475569"; }}
-          >
-            <ChevronLeft size={16} />
-          </button>
-          <button
-            onClick={() => { setYear(today.getFullYear()); setMonth(today.getMonth()); setSelectedDay(null); }}
-            className="px-3 h-8 text-xs font-medium rounded-lg transition-colors cursor-pointer"
-            style={{ color: "#a7f3d0", background: "rgba(52,211,153,0.1)" }}
-            onMouseEnter={e => { e.currentTarget.style.background = "rgba(52,211,153,0.16)"; }}
-            onMouseLeave={e => { e.currentTarget.style.background = "rgba(52,211,153,0.1)"; }}
-          >
-            Hoy
-          </button>
-          <button
-            onClick={nextMonth}
-            className="w-8 h-8 flex items-center justify-center rounded-lg transition-colors cursor-pointer"
-            style={{ color: "#475569" }}
-            onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.08)"; e.currentTarget.style.color = "#94a3b8"; }}
-            onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#475569"; }}
-          >
-            <ChevronRight size={16} />
-          </button>
+          <div className="flex items-center border-[1.5px] border-ink">
+            <button
+              onClick={prevMonth}
+              aria-label="Mes anterior"
+              className="flex h-8 w-8 cursor-pointer items-center justify-center transition-colors hover:bg-marker"
+            >
+              <ChevronLeft size={16} />
+            </button>
+            <button
+              onClick={() => { setYear(today.getFullYear()); setMonth(today.getMonth()); setSelectedDay(null); }}
+              className="label-mono h-8 cursor-pointer border-x-[1.5px] border-ink px-3 transition-colors hover:bg-marker"
+            >
+              Hoy
+            </button>
+            <button
+              onClick={nextMonth}
+              aria-label="Mes siguiente"
+              className="flex h-8 w-8 cursor-pointer items-center justify-center transition-colors hover:bg-marker"
+            >
+              <ChevronRight size={16} />
+            </button>
+          </div>
         </div>
       </div>
 
-      <div className="p-4">
+      <div className="px-2 pb-2 sm:px-4">
         {/* Weekday headers */}
-        <div className="grid grid-cols-7 mb-1">
+        <div className="grid grid-cols-7">
           {WEEKDAYS.map(d => (
-            <div key={d} className="text-center text-xs font-medium py-2" style={{ color: "#334155" }}>
+            <div key={d} className="label-mono py-2.5 text-center text-ink-faint">
               {d}
             </div>
           ))}
         </div>
 
         {/* Day grid */}
-        <div className="grid grid-cols-7 gap-0.5">
+        <div className="grid grid-cols-7 border-l border-t border-ink/15">
           {cells.map((day, i) => {
-            if (!day) return <div key={`empty-${i}`} />;
+            if (!day) return <div key={`empty-${i}`} className="border-b border-r border-ink/15 bg-paper/60" />;
             const daySubs = renewals.get(day) ?? [];
             const dayExps = expensesByDay.get(day) ?? [];
             const subsTotal = daySubs.reduce((acc, s) => acc + toMonthlyPrice(s), 0);
@@ -147,64 +142,53 @@ export default function MonthlyCalendar({ subscriptions, expenses }: Props) {
             const dayTotal = subsTotal + expsTotal;
             const hasActivity = daySubs.length > 0 || dayExps.length > 0;
             const isSelected = selectedDay === day;
+            const todayCell = isToday(day);
 
             return (
               <button
                 key={day}
                 onClick={() => setSelectedDay(isSelected ? null : day)}
-                className="relative flex flex-col items-center py-1.5 px-1 rounded-xl transition-all cursor-pointer min-h-[56px]"
-                style={{
-                  background: isSelected
-                    ? "rgba(52,211,153,0.16)"
-                    : hasActivity
-                    ? "rgba(255,255,255,0.04)"
-                    : "transparent",
-                  border: isSelected
-                    ? "1px solid rgba(52,211,153,0.42)"
-                    : isToday(day)
-                    ? "1px solid rgba(52,211,153,0.28)"
-                    : "1px solid transparent",
-                }}
+                className={`relative flex min-h-[64px] cursor-pointer flex-col items-start justify-between border-b border-r border-ink/15 p-1.5 text-left transition-colors sm:min-h-[76px] sm:p-2 ${
+                  isSelected ? "bg-ink text-paper-2" : hasActivity ? "hover:bg-marker/40" : "hover:bg-paper"
+                }`}
               >
                 <span
-                  className="text-xs font-medium tabular-nums leading-none mb-1"
-                  style={{ color: isToday(day) ? "#a7f3d0" : hasActivity ? "#e2e8f0" : "#475569" }}
+                  className={`relative font-mono text-xs tabular-nums leading-none ${
+                    isSelected ? "" : todayCell ? "font-medium text-stamp" : hasActivity ? "text-ink" : "text-ink-faint"
+                  }`}
                 >
                   {day}
+                  {todayCell && !isSelected && (
+                    <span className="absolute -inset-x-2 -inset-y-1.5 -rotate-6 rounded-[50%] border-[1.5px] border-stamp" />
+                  )}
                 </span>
 
-                {/* Dots row: round=subscription, square=expense */}
                 {hasActivity && (
-                  <div className="flex gap-0.5 flex-wrap justify-center">
-                    {daySubs.slice(0, 2).map((sub, idx) => (
-                      <span
-                        key={`s${idx}`}
-                        className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-                        style={{ background: CATEGORY_META[sub.category].color }}
-                      />
-                    ))}
-                    {dayExps.slice(0, 2).map((exp, idx) => (
-                      <span
-                        key={`e${idx}`}
-                        className="w-1.5 h-1.5 rounded-sm flex-shrink-0"
-                        style={{ background: EXPENSE_CATEGORY_META[exp.category].color }}
-                      />
-                    ))}
-                    {daySubs.length + dayExps.length > 4 && (
-                      <span className="text-[9px] leading-none" style={{ color: "#64748b" }}>
-                        +{daySubs.length + dayExps.length - 4}
-                      </span>
-                    )}
+                  <div className="flex w-full flex-col gap-1">
+                    <div className="flex flex-wrap gap-0.5">
+                      {daySubs.slice(0, 3).map((sub, idx) => (
+                        <span
+                          key={`s${idx}`}
+                          className="h-2 w-2 flex-shrink-0 rounded-full border border-ink/40"
+                          style={{ background: CATEGORY_META[sub.category].color }}
+                        />
+                      ))}
+                      {dayExps.slice(0, 3).map((exp, idx) => (
+                        <span
+                          key={`e${idx}`}
+                          className="h-2 w-2 flex-shrink-0 border border-ink/40"
+                          style={{ background: EXPENSE_CATEGORY_META[exp.category].color }}
+                        />
+                      ))}
+                    </div>
+                    <span
+                      className={`hidden font-mono text-[10px] font-medium leading-none tabular-nums sm:block ${
+                        isSelected ? "text-paper-2" : "text-ink-soft"
+                      }`}
+                    >
+                      {formatCurrency(dayTotal)}
+                    </span>
                   </div>
-                )}
-
-                {hasActivity && (
-                  <span
-                    className="text-[9px] font-medium tabular-nums mt-0.5 leading-none"
-                    style={{ color: "#64748b" }}
-                  >
-                    {formatCurrency(dayTotal)}
-                  </span>
                 )}
               </button>
             );
@@ -213,78 +197,59 @@ export default function MonthlyCalendar({ subscriptions, expenses }: Props) {
       </div>
 
       {/* Legend */}
-      <div
-        className="flex items-center gap-4 px-5 pb-4"
-        style={{ color: "#475569" }}
-      >
+      <div className="flex items-center gap-5 px-5 pb-4 pt-2 text-ink-soft">
         <div className="flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full inline-block" style={{ background: "#34d399" }} />
-          <span className="text-xs">Suscripción</span>
+          <span className="inline-block h-2.5 w-2.5 rounded-full border border-ink/40 bg-carbon" />
+          <span className="label-mono">Suscripción</span>
         </div>
         <div className="flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-sm inline-block" style={{ background: "#10b981" }} />
-          <span className="text-xs">Gasto</span>
+          <span className="inline-block h-2.5 w-2.5 border border-ink/40 bg-carbon" />
+          <span className="label-mono">Gasto</span>
         </div>
       </div>
 
       {/* Selected day panel */}
       {selectedDay && (selectedSubs.length > 0 || selectedExps.length > 0) && (
-        <div
-          className="mx-4 mb-4 rounded-xl overflow-hidden"
-          style={{ background: "rgba(52,211,153,0.08)", border: "1px solid rgba(52,211,153,0.18)" }}
-        >
-          <div
-            className="flex items-center justify-between px-4 py-3 border-b"
-            style={{ borderColor: "rgba(52,211,153,0.15)" }}
-          >
-            <p className="text-xs font-semibold text-white">
+        <div className="animate-fade-in border-t-[1.5px] border-ink bg-paper px-5 py-4">
+          <div className="mb-2 flex items-center justify-between">
+            <p className="font-display text-lg font-bold tracking-tight">
               {selectedDay} de {MONTH_NAMES[month]}
             </p>
             <div className="flex items-center gap-3">
-              <span className="text-sm font-bold tabular-nums" style={{ color: "#a7f3d0" }}>
+              <span className="font-mono text-base font-medium tabular-nums">
                 {formatCurrency(selectedSubsTotal + selectedExpsTotal)}
               </span>
               <button
                 onClick={() => setSelectedDay(null)}
-                className="w-5 h-5 flex items-center justify-center rounded cursor-pointer"
-                style={{ color: "#475569" }}
-                onMouseEnter={e => { e.currentTarget.style.color = "#94a3b8"; }}
-                onMouseLeave={e => { e.currentTarget.style.color = "#475569"; }}
+                aria-label="Cerrar"
+                className="flex h-7 w-7 cursor-pointer items-center justify-center border-[1.5px] border-ink transition-colors hover:bg-marker"
               >
                 <X size={13} />
               </button>
             </div>
           </div>
-          <div className="divide-y" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
+          <ul className="font-mono text-sm">
             {selectedSubs.map(sub => (
-              <div key={sub.id} className="flex items-center gap-3 px-4 py-3">
-                <span className="text-base leading-none">{CATEGORY_META[sub.category].icon}</span>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-white truncate">{sub.name}</p>
-                  <p className="text-xs mt-0.5 truncate" style={{ color: "#64748b" }}>
-                    Suscripción · {CATEGORY_META[sub.category].label}
-                  </p>
-                </div>
-                <span className="text-sm font-semibold tabular-nums flex-shrink-0" style={{ color: "#e2e8f0" }}>
-                  {formatCurrency(toMonthlyPrice(sub))}
+              <li key={sub.id} className="leader py-1.5">
+                <span className="truncate">
+                  {CATEGORY_META[sub.category].icon} {sub.name}
+                  <span className="ml-2 text-xs text-ink-faint">suscripción</span>
                 </span>
-              </div>
+                <span className="leader-fill" />
+                <span className="tabular-nums">{formatCurrency(toMonthlyPrice(sub))}</span>
+              </li>
             ))}
             {selectedExps.map(exp => (
-              <div key={exp.id} className="flex items-center gap-3 px-4 py-3">
-                <span className="text-base leading-none">{EXPENSE_CATEGORY_META[exp.category].icon}</span>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-white truncate">{exp.name}</p>
-                  <p className="text-xs mt-0.5 truncate" style={{ color: "#64748b" }}>
-                    Gasto · {EXPENSE_CATEGORY_META[exp.category].label}
-                  </p>
-                </div>
-                <span className="text-sm font-semibold tabular-nums flex-shrink-0" style={{ color: "#34d399" }}>
-                  {formatCurrency(exp.amount)}
+              <li key={exp.id} className="leader py-1.5 text-carbon">
+                <span className="truncate">
+                  {EXPENSE_CATEGORY_META[exp.category].icon} {exp.name}
+                  <span className="ml-2 text-xs opacity-60">gasto</span>
                 </span>
-              </div>
+                <span className="leader-fill" />
+                <span className="tabular-nums">{formatCurrency(exp.amount)}</span>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       )}
     </div>

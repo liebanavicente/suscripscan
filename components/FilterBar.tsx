@@ -9,16 +9,15 @@ interface Props {
 }
 
 export default function FilterBar({ selected, onChange }: Props) {
+  const base =
+    "h-9 cursor-pointer border-[1.5px] border-ink transition-all flex items-center justify-center flex-shrink-0";
   return (
-    <div className="flex gap-2 flex-wrap">
+    <div className="flex flex-wrap gap-2">
       <button
         onClick={() => onChange("all")}
-        className="h-9 px-3 rounded-xl text-xs font-medium transition-all cursor-pointer flex-shrink-0"
-        style={{
-          background: selected === "all" ? "#34d399" : "rgba(255,255,255,0.05)",
-          color: selected === "all" ? "white" : "#64748b",
-          border: selected === "all" ? "1px solid #34d399" : "1px solid rgba(255,255,255,0.08)",
-        }}
+        className={`${base} label-mono px-3 ${
+          selected === "all" ? "bg-ink text-paper-2" : "bg-paper-2 text-ink hover:bg-marker"
+        }`}
       >
         Todas
       </button>
@@ -30,15 +29,14 @@ export default function FilterBar({ selected, onChange }: Props) {
             key={cat}
             onClick={() => onChange(cat)}
             title={meta.label}
-            className="w-9 h-9 rounded-xl text-base transition-all cursor-pointer flex items-center justify-center flex-shrink-0"
-            style={{
-              background: isActive ? `${meta.color}22` : "rgba(255,255,255,0.05)",
-              border: isActive
-                ? `1px solid ${meta.color}50`
-                : "1px solid rgba(255,255,255,0.08)",
-              filter: isActive ? "none" : "grayscale(0.3) opacity(0.7)",
-              transform: isActive ? "scale(1.1)" : "scale(1)",
-            }}
+            aria-label={meta.label}
+            aria-pressed={isActive}
+            className={`${base} w-9 text-base ${isActive ? "-translate-y-0.5" : "bg-paper-2 hover:bg-marker"}`}
+            style={
+              isActive
+                ? { background: meta.color, boxShadow: "2px 2px 0 var(--color-ink)" }
+                : undefined
+            }
           >
             {meta.icon}
           </button>
