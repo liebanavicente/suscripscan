@@ -76,9 +76,9 @@ export default function SubscriptionModal({
       <div
         className="w-full max-w-md rounded-2xl border animate-fade-in-up"
         style={{
-          background: "linear-gradient(135deg, #18181f 0%, #111118 100%)",
+          background: "linear-gradient(135deg, #151a22 0%, #0d1117 100%)",
           borderColor: "rgba(255,255,255,0.1)",
-          boxShadow: "0 25px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(124,58,237,0.1)",
+          boxShadow: "0 25px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(52,211,153,0.1)",
         }}
       >
         {/* Header */}
@@ -114,7 +114,7 @@ export default function SubscriptionModal({
                 background: "rgba(255,255,255,0.05)",
                 border: errors.name ? "1px solid #ef4444" : "1px solid rgba(255,255,255,0.1)",
               }}
-              onFocus={(e) => !errors.name && (e.target.style.borderColor = "#7c3aed")}
+              onFocus={(e) => !errors.name && (e.target.style.borderColor = "#34d399")}
               onBlur={(e) => !errors.name && (e.target.style.borderColor = "rgba(255,255,255,0.1)")}
             />
             {errors.name && <p className="mt-1 text-xs" style={{ color: "#ef4444" }}>{errors.name}</p>}
@@ -160,7 +160,7 @@ export default function SubscriptionModal({
                   background: "rgba(255,255,255,0.05)",
                   border: errors.price ? "1px solid #ef4444" : "1px solid rgba(255,255,255,0.1)",
                 }}
-                onFocus={(e) => !errors.price && (e.target.style.borderColor = "#7c3aed")}
+                onFocus={(e) => !errors.price && (e.target.style.borderColor = "#34d399")}
                 onBlur={(e) => !errors.price && (e.target.style.borderColor = "rgba(255,255,255,0.1)")}
               />
               {errors.price && <p className="mt-1 text-xs" style={{ color: "#ef4444" }}>{errors.price}</p>}
@@ -203,7 +203,7 @@ export default function SubscriptionModal({
                 border: errors.renewalDate ? "1px solid #ef4444" : "1px solid rgba(255,255,255,0.1)",
                 colorScheme: "dark",
               }}
-              onFocus={(e) => !errors.renewalDate && (e.target.style.borderColor = "#7c3aed")}
+              onFocus={(e) => !errors.renewalDate && (e.target.style.borderColor = "#34d399")}
               onBlur={(e) => !errors.renewalDate && (e.target.style.borderColor = "rgba(255,255,255,0.1)")}
             />
             {errors.renewalDate && (
@@ -231,8 +231,9 @@ export default function SubscriptionModal({
               type="submit"
               className="flex-1 rounded-xl py-3 text-sm font-semibold transition-all cursor-pointer text-white"
               style={{
-                background: "linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%)",
-                boxShadow: "0 4px 20px rgba(124,58,237,0.4)",
+                background: "#6ee7b7",
+                color: "#07100d",
+                boxShadow: "0 4px 20px rgba(52,211,153,0.24)",
               }}
               onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.9")}
               onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}

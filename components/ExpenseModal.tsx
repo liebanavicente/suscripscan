@@ -53,7 +53,7 @@ export default function ExpenseModal({ open, expense, onClose, onSave }: Props) 
       <div
         className="w-full max-w-md rounded-2xl border animate-fade-in-up"
         style={{
-          background: "linear-gradient(135deg, #18181f 0%, #111118 100%)",
+          background: "linear-gradient(135deg, #151a22 0%, #0d1117 100%)",
           borderColor: "rgba(255,255,255,0.1)",
           boxShadow: "0 25px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(16,185,129,0.1)",
         }}
@@ -192,7 +192,7 @@ export default function ExpenseModal({ open, expense, onClose, onSave }: Props) 
             <button
               type="submit"
               className="flex-1 rounded-xl py-3 text-sm font-semibold transition-all cursor-pointer text-white"
-              style={{ background: "linear-gradient(135deg, #059669 0%, #10b981 100%)", boxShadow: "0 4px 20px rgba(16,185,129,0.3)" }}
+              style={{ background: "#6ee7b7", color: "#07100d", boxShadow: "0 4px 20px rgba(52,211,153,0.24)" }}
               onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.9")}
               onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
             >

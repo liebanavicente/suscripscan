@@ -86,7 +86,7 @@ export default function MonthlyCalendar({ subscriptions, expenses }: Props) {
           </h2>
           <div className="flex items-center gap-3 mt-0.5">
             <span className="text-xs" style={{ color: "#64748b" }}>
-              Suscripciones <span style={{ color: "#a78bfa" }}>{formatCurrency(totalSubsMonth)}</span>
+              Suscripciones <span style={{ color: "#a7f3d0" }}>{formatCurrency(totalSubsMonth)}</span>
             </span>
             {totalExpsMonth > 0 && (
               <span className="text-xs" style={{ color: "#64748b" }}>
@@ -108,9 +108,9 @@ export default function MonthlyCalendar({ subscriptions, expenses }: Props) {
           <button
             onClick={() => { setYear(today.getFullYear()); setMonth(today.getMonth()); setSelectedDay(null); }}
             className="px-3 h-8 text-xs font-medium rounded-lg transition-colors cursor-pointer"
-            style={{ color: "#7c3aed", background: "rgba(124,58,237,0.1)" }}
-            onMouseEnter={e => { e.currentTarget.style.background = "rgba(124,58,237,0.2)"; }}
-            onMouseLeave={e => { e.currentTarget.style.background = "rgba(124,58,237,0.1)"; }}
+            style={{ color: "#a7f3d0", background: "rgba(52,211,153,0.1)" }}
+            onMouseEnter={e => { e.currentTarget.style.background = "rgba(52,211,153,0.16)"; }}
+            onMouseLeave={e => { e.currentTarget.style.background = "rgba(52,211,153,0.1)"; }}
           >
             Hoy
           </button>
@@ -155,20 +155,20 @@ export default function MonthlyCalendar({ subscriptions, expenses }: Props) {
                 className="relative flex flex-col items-center py-1.5 px-1 rounded-xl transition-all cursor-pointer min-h-[56px]"
                 style={{
                   background: isSelected
-                    ? "rgba(124,58,237,0.2)"
+                    ? "rgba(52,211,153,0.16)"
                     : hasActivity
                     ? "rgba(255,255,255,0.04)"
                     : "transparent",
                   border: isSelected
-                    ? "1px solid rgba(124,58,237,0.5)"
+                    ? "1px solid rgba(52,211,153,0.42)"
                     : isToday(day)
-                    ? "1px solid rgba(124,58,237,0.3)"
+                    ? "1px solid rgba(52,211,153,0.28)"
                     : "1px solid transparent",
                 }}
               >
                 <span
                   className="text-xs font-medium tabular-nums leading-none mb-1"
-                  style={{ color: isToday(day) ? "#a78bfa" : hasActivity ? "#e2e8f0" : "#475569" }}
+                  style={{ color: isToday(day) ? "#a7f3d0" : hasActivity ? "#e2e8f0" : "#475569" }}
                 >
                   {day}
                 </span>
@@ -218,7 +218,7 @@ export default function MonthlyCalendar({ subscriptions, expenses }: Props) {
         style={{ color: "#475569" }}
       >
         <div className="flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full inline-block" style={{ background: "#7c3aed" }} />
+          <span className="w-2 h-2 rounded-full inline-block" style={{ background: "#34d399" }} />
           <span className="text-xs">Suscripción</span>
         </div>
         <div className="flex items-center gap-1.5">
@@ -231,17 +231,17 @@ export default function MonthlyCalendar({ subscriptions, expenses }: Props) {
       {selectedDay && (selectedSubs.length > 0 || selectedExps.length > 0) && (
         <div
           className="mx-4 mb-4 rounded-xl overflow-hidden"
-          style={{ background: "rgba(124,58,237,0.08)", border: "1px solid rgba(124,58,237,0.2)" }}
+          style={{ background: "rgba(52,211,153,0.08)", border: "1px solid rgba(52,211,153,0.18)" }}
         >
           <div
             className="flex items-center justify-between px-4 py-3 border-b"
-            style={{ borderColor: "rgba(124,58,237,0.15)" }}
+            style={{ borderColor: "rgba(52,211,153,0.15)" }}
           >
             <p className="text-xs font-semibold text-white">
               {selectedDay} de {MONTH_NAMES[month]}
             </p>
             <div className="flex items-center gap-3">
-              <span className="text-sm font-bold tabular-nums" style={{ color: "#a78bfa" }}>
+              <span className="text-sm font-bold tabular-nums" style={{ color: "#a7f3d0" }}>
                 {formatCurrency(selectedSubsTotal + selectedExpsTotal)}
               </span>
               <button

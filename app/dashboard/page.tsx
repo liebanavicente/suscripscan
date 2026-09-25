@@ -7,7 +7,7 @@ import { Plus, ArrowLeft, Search, RotateCcw, Receipt } from "lucide-react";
 import { Category, Expense, Subscription } from "@/lib/types";
 import { loadSubscriptions, loadDemoSubscriptions, saveSubscriptions, loadExpenses, saveExpenses } from "@/lib/storage";
 import { formatCurrency, getTotalMonthly } from "@/lib/calculations";
-import { parseLocalISODate, todayLocalISODate } from "@/lib/dates";
+import { parseLocalISODate } from "@/lib/dates";
 import { EXPENSE_CATEGORY_META } from "@/lib/constants";
 import StatsCards from "@/components/StatsCards";
 import CategoryChart from "@/components/CategoryChart";
@@ -19,12 +19,13 @@ import ImpactPhrases from "@/components/ImpactPhrases";
 import FilterBar from "@/components/FilterBar";
 import ExportButton from "@/components/ExportButton";
 import MonthlyCalendar from "@/components/MonthlyCalendar";
+import BrandMark from "@/components/BrandMark";
 
 export default function DashboardPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen flex items-center justify-center" style={{ background: "#09090f" }}>
-        <div className="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin" style={{ borderColor: "#7c3aed", borderTopColor: "transparent" }} />
+        <div className="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin" style={{ borderColor: "#34d399", borderTopColor: "transparent" }} />
       </div>
     }>
       <DashboardContent />
@@ -113,11 +114,11 @@ function DashboardContent() {
   }).reduce((acc, e) => acc + e.amount, 0);
 
   return (
-    <div className="min-h-screen" style={{ background: "#09090f" }}>
+    <div className="min-h-screen premium-bg">
       {/* Top nav */}
       <header
         className="sticky top-0 z-40 border-b"
-        style={{ background: "rgba(9,9,15,0.85)", backdropFilter: "blur(12px)", borderColor: "rgba(255,255,255,0.07)" }}
+        style={{ background: "rgba(7,10,14,0.84)", backdropFilter: "blur(18px)", borderColor: "rgba(255,255,255,0.08)" }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center gap-3">
           <Link
@@ -130,12 +131,7 @@ function DashboardContent() {
             <ArrowLeft size={18} />
           </Link>
 
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "linear-gradient(135deg, #7c3aed, #06b6d4)" }}>
-              <span className="text-white text-xs font-bold">S</span>
-            </div>
-            <span className="font-bold text-white text-base">Suscripscan</span>
-          </div>
+          <BrandMark size="sm" />
 
           <div className="flex-1" />
 
@@ -145,7 +141,7 @@ function DashboardContent() {
             style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}
           >
             <div className="flex items-center gap-2">
-              <span className="text-xs" style={{ color: "#7c3aed" }}>Suscripciones</span>
+              <span className="text-xs" style={{ color: "#a7f3d0" }}>Suscripciones</span>
               <span className="text-sm font-bold text-white tabular-nums">{formatCurrency(monthly)}</span>
             </div>
             {thisMonthExps > 0 && (
@@ -186,12 +182,12 @@ function DashboardContent() {
             onClick={() => { setEditingExp(null); setExpModalOpen(true); }}
             className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold transition-all cursor-pointer"
             style={{
-              background: "rgba(16,185,129,0.12)",
-              color: "#34d399",
-              border: "1px solid rgba(16,185,129,0.25)",
+              background: "rgba(52,211,153,0.1)",
+              color: "#a7f3d0",
+              border: "1px solid rgba(52,211,153,0.22)",
             }}
-            onMouseEnter={e => { e.currentTarget.style.background = "rgba(16,185,129,0.2)"; }}
-            onMouseLeave={e => { e.currentTarget.style.background = "rgba(16,185,129,0.12)"; }}
+            onMouseEnter={e => { e.currentTarget.style.background = "rgba(52,211,153,0.16)"; }}
+            onMouseLeave={e => { e.currentTarget.style.background = "rgba(52,211,153,0.1)"; }}
           >
             <Receipt size={15} />
             <span className="hidden sm:inline">Gasto</span>
@@ -201,7 +197,7 @@ function DashboardContent() {
           <button
             onClick={() => { setEditingSub(null); setSubModalOpen(true); }}
             className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all cursor-pointer"
-            style={{ background: "linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%)", boxShadow: "0 4px 16px rgba(124,58,237,0.3)" }}
+            style={{ background: "#6ee7b7", color: "#07100d", boxShadow: "0 10px 24px rgba(52,211,153,0.18)" }}
             onMouseEnter={e => (e.currentTarget.style.opacity = "0.9")}
             onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
           >
@@ -281,7 +277,7 @@ function DashboardContent() {
                     </span>
                   </h2>
                   {(filter !== "all" || search) && (
-                    <button onClick={() => { setFilter("all"); setSearch(""); }} className="text-xs cursor-pointer" style={{ color: "#7c3aed" }}>
+                    <button onClick={() => { setFilter("all"); setSearch(""); }} className="text-xs cursor-pointer" style={{ color: "#a7f3d0" }}>
                       Limpiar filtros
                     </button>
                   )}
@@ -299,7 +295,7 @@ function DashboardContent() {
                           <button
                             onClick={() => { setEditingSub(null); setSubModalOpen(true); }}
                             className="text-sm font-semibold px-5 py-2.5 rounded-xl text-white cursor-pointer"
-                            style={{ background: "linear-gradient(135deg, #7c3aed, #6d28d9)" }}
+                            style={{ background: "#6ee7b7", color: "#07100d" }}
                           >
                             Añadir suscripción
                           </button>
@@ -352,7 +348,7 @@ function DashboardContent() {
                       <button
                         onClick={() => { setEditingExp(null); setExpModalOpen(true); }}
                         className="text-sm font-semibold px-5 py-2.5 rounded-xl text-white cursor-pointer"
-                        style={{ background: "linear-gradient(135deg, #059669, #10b981)" }}
+                        style={{ background: "#6ee7b7", color: "#07100d" }}
                       >
                         Añadir gasto
                       </button>
@@ -382,14 +378,14 @@ function DashboardContent() {
 
             <div
               className="rounded-2xl p-5"
-              style={{ background: "linear-gradient(135deg, rgba(6,182,212,0.1) 0%, rgba(16,185,129,0.05) 100%)", border: "1px solid rgba(6,182,212,0.2)" }}
+              style={{ background: "linear-gradient(135deg, rgba(52,211,153,0.1) 0%, rgba(248,216,137,0.05) 100%)", border: "1px solid rgba(52,211,153,0.18)" }}
             >
-              <p className="text-xs font-medium mb-4" style={{ color: "#06b6d4" }}>Resumen financiero</p>
+              <p className="text-xs font-medium mb-4" style={{ color: "#a7f3d0" }}>Resumen financiero</p>
               <div className="space-y-3">
-                <Row label="Suscripciones/mes" value={formatCurrency(getTotalMonthly(subscriptions))} color="#a78bfa" />
+                <Row label="Suscripciones/mes" value={formatCurrency(getTotalMonthly(subscriptions))} color="#a7f3d0" />
                 <Row label="Gastos este mes" value={formatCurrency(thisMonthExps)} color="#34d399" />
                 <div className="border-t pt-3" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
-                  <Row label="Total este mes" value={formatCurrency(getTotalMonthly(subscriptions) + thisMonthExps)} color="#06b6d4" />
+                  <Row label="Total este mes" value={formatCurrency(getTotalMonthly(subscriptions) + thisMonthExps)} color="#f8d889" />
                 </div>
                 <Row label="Gasto anual est." value={formatCurrency(getTotalMonthly(subscriptions) * 12)} color="#f59e0b" />
                 <div className="border-t pt-3" style={{ borderColor: "rgba(255,255,255,0.08)" }}>

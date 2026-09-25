@@ -89,8 +89,8 @@ export default function SubscriptionCard({ subscription, onEdit, onDelete }: Pro
           className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors cursor-pointer"
           style={{ color: "#64748b" }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.background = "rgba(124,58,237,0.2)";
-            e.currentTarget.style.color = "#a78bfa";
+            e.currentTarget.style.background = "rgba(52,211,153,0.14)";
+            e.currentTarget.style.color = "#a7f3d0";
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.background = "transparent";

@@ -15,9 +15,9 @@ export default function FilterBar({ selected, onChange }: Props) {
         onClick={() => onChange("all")}
         className="h-9 px-3 rounded-xl text-xs font-medium transition-all cursor-pointer flex-shrink-0"
         style={{
-          background: selected === "all" ? "#7c3aed" : "rgba(255,255,255,0.05)",
+          background: selected === "all" ? "#34d399" : "rgba(255,255,255,0.05)",
           color: selected === "all" ? "white" : "#64748b",
-          border: selected === "all" ? "1px solid #7c3aed" : "1px solid rgba(255,255,255,0.08)",
+          border: selected === "all" ? "1px solid #34d399" : "1px solid rgba(255,255,255,0.08)",
         }}
       >
         Todas

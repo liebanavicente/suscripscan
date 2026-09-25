@@ -58,7 +58,7 @@ function BarTooltip({ active, payload, label }: BarTooltipProps) {
       }}
     >
       <p className="font-medium text-white mb-1">{label}</p>
-      <p style={{ color: "#a78bfa" }}>{formatCurrency(payload[0].value)}/mes</p>
+      <p style={{ color: "#a7f3d0" }}>{formatCurrency(payload[0].value)}/mes</p>
     </div>
   );
 }

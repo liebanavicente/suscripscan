@@ -119,8 +119,8 @@ export default function ExportButton({ subscriptions, expenses, onImport }: Prop
               onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.06)")}
               onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
             >
-              <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: "rgba(124,58,237,0.15)" }}>
-                <Upload size={14} style={{ color: "#a78bfa" }} />
+              <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: "rgba(52,211,153,0.14)" }}>
+                <Upload size={14} style={{ color: "#a7f3d0" }} />
               </div>
               <div>
                 <p className="font-medium">Importar backup</p>
@@ -141,8 +141,8 @@ export default function ExportButton({ subscriptions, expenses, onImport }: Prop
                   onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.06)")}
                   onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
                 >
-                  <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: "rgba(6,182,212,0.15)" }}>
-                    <Database size={14} style={{ color: "#06b6d4" }} />
+                  <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: "rgba(248,216,137,0.13)" }}>
+                    <Database size={14} style={{ color: "#f8d889" }} />
                   </div>
                   <div>
                     <p className="font-medium">{loading === "json" ? "Guardando..." : "Guardar backup"}</p>

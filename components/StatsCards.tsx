@@ -57,7 +57,7 @@ export default function StatsCards({ subscriptions }: { subscriptions: Subscript
         label="Gasto mensual"
         value={formatCurrency(monthly)}
         sub={`${subscriptions.length} suscripci${subscriptions.length === 1 ? "ón" : "ones"}`}
-        accentColor="#7c3aed"
+        accentColor="#34d399"
         delay={0}
       />
       <StatCard
@@ -65,7 +65,7 @@ export default function StatsCards({ subscriptions }: { subscriptions: Subscript
         label="Gasto anual"
         value={formatCurrency(annual)}
         sub="Proyección total"
-        accentColor="#06b6d4"
+        accentColor="#f8d889"
         delay={100}
       />
       <StatCard
