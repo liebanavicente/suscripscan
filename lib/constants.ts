@@ -1,48 +1,49 @@
 import { Category, ExpenseCategory, Subscription } from "./types";
 import { addDaysToTodayISODate } from "./dates";
 
+// Tintas Risograph: se leen bien sobre papel y dan carácter a los gráficos.
 export const CATEGORY_META: Record<
   Category,
   { label: string; color: string; icon: string }
 > = {
   phone_internet: {
     label: "Teléfono e internet",
-    color: "#6366f1",
+    color: "#0078bf",
     icon: "📱",
   },
   tv_streaming: {
     label: "Televisión y streaming",
-    color: "#ec4899",
+    color: "#ff48b0",
     icon: "📺",
   },
   music: {
     label: "Música",
-    color: "#f59e0b",
+    color: "#f2a900",
     icon: "🎵",
   },
   ai_tools: {
     label: "IA y herramientas tecnológicas",
-    color: "#10b981",
+    color: "#00a95c",
     icon: "🤖",
   },
   software: {
     label: "Software",
-    color: "#3b82f6",
+    color: "#3255a4",
     icon: "💻",
   },
   gaming: {
     label: "Gaming",
-    color: "#8b5cf6",
+    color: "#765ba7",
     icon: "🎮",
   },
   cloud_storage: {
     label: "Almacenamiento en la nube",
-    color: "#06b6d4",
+    color: "#00838a",
     icon: "☁️",
   },
   other: {
     label: "Otros",
-    color: "#64748b",
+    color: "#88806c",
     icon: "📦",
   },
 };
@@ -129,15 +130,15 @@ export const EXPENSE_CATEGORY_META: Record<
   ExpenseCategory,
   { label: string; color: string; icon: string }
 > = {
-  alimentacion: { label: "Alimentación", color: "#f59e0b", icon: "🛒" },
-  transporte:   { label: "Transporte",   color: "#3b82f6", icon: "🚗" },
-  ocio:         { label: "Ocio",         color: "#ec4899", icon: "🎉" },
-  salud:        { label: "Salud",        color: "#10b981", icon: "🏥" },
-  hogar:        { label: "Hogar",        color: "#6366f1", icon: "🏠" },
-  ropa:         { label: "Ropa",         color: "#8b5cf6", icon: "👗" },
-  educacion:    { label: "Educación",    color: "#06b6d4", icon: "📚" },
-  viajes:       { label: "Viajes",       color: "#f97316", icon: "✈️" },
-  otros:        { label: "Otros",        color: "#64748b", icon: "📦" },
+  alimentacion: { label: "Alimentación", color: "#f2a900", icon: "🛒" },
+  transporte:   { label: "Transporte",   color: "#0078bf", icon: "🚗" },
+  ocio:         { label: "Ocio",         color: "#ff48b0", icon: "🎉" },
+  salud:        { label: "Salud",        color: "#00a95c", icon: "🏥" },
+  hogar:        { label: "Hogar",        color: "#3255a4", icon: "🏠" },
+  ropa:         { label: "Ropa",         color: "#765ba7", icon: "👗" },
+  educacion:    { label: "Educación",    color: "#00838a", icon: "📚" },
+  viajes:       { label: "Viajes",       color: "#ff6c2f", icon: "✈️" },
+  otros:        { label: "Otros",        color: "#88806c", icon: "📦" },
 };
 
 export const EXPENSE_CATEGORIES: ExpenseCategory[] = [

@@ -26,16 +26,9 @@ function CustomTooltip({ active, payload }: TooltipProps) {
   if (!active || !payload?.length) return null;
   const item = payload[0];
   return (
-    <div
-      className="rounded-xl px-4 py-3 text-sm"
-      style={{
-        background: "#18181f",
-        border: "1px solid rgba(255,255,255,0.12)",
-        boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
-      }}
-    >
-      <p className="font-medium text-white mb-1">{item.payload.label}</p>
-      <p style={{ color: item.payload.color }}>{formatCurrency(item.value)}/mes</p>
+    <div className="card-flat px-3 py-2 font-mono text-xs" style={{ boxShadow: "3px 3px 0 var(--color-ink)" }}>
+      <p className="mb-1 font-medium text-ink">{item.payload.label}</p>
+      <p className="tabular-nums text-ink-soft">{formatCurrency(item.value)}/mes</p>
     </div>
   );
 }
@@ -49,16 +42,18 @@ interface BarTooltipProps {
 function BarTooltip({ active, payload, label }: BarTooltipProps) {
   if (!active || !payload?.length) return null;
   return (
-    <div
-      className="rounded-xl px-4 py-3 text-sm"
-      style={{
-        background: "#18181f",
-        border: "1px solid rgba(255,255,255,0.12)",
-        boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
-      }}
-    >
-      <p className="font-medium text-white mb-1">{label}</p>
-      <p style={{ color: "#a7f3d0" }}>{formatCurrency(payload[0].value)}/mes</p>
+    <div className="card-flat px-3 py-2 font-mono text-xs" style={{ boxShadow: "3px 3px 0 var(--color-ink)" }}>
+      <p className="mb-1 font-medium text-ink">{label}</p>
+      <p className="tabular-nums text-ink-soft">{formatCurrency(payload[0].value)}/mes</p>
+    </div>
+  );
+}
+
+function ChartTitle({ n, title }: { n: string; title: string }) {
+  return (
+    <div className="mb-6 flex items-center justify-between border-b-[1.5px] border-dashed border-ink/30 pb-3">
+      <h3 className="font-display text-lg font-bold tracking-tight">{title}</h3>
+      <span className="label-mono text-ink-faint">Fig. {n}</span>
     </div>
   );
 }
@@ -68,8 +63,8 @@ export default function CategoryChart({ subscriptions }: { subscriptions: Subscr
 
   if (!stats.length) {
     return (
-      <div className="flex items-center justify-center h-48" style={{ color: "#475569" }}>
-        <p className="text-sm">Añade suscripciones para ver los gráficos</p>
+      <div className="card-flat flex h-48 items-center justify-center border-dashed">
+        <p className="font-mono text-sm text-ink-faint">Añade suscripciones para ver los gráficos</p>
       </div>
     );
   }
@@ -91,16 +86,8 @@ export default function CategoryChart({ subscriptions }: { subscriptions: Subscr
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {/* Donut chart */}
-      <div
-        className="rounded-2xl p-6"
-        style={{
-          background: "linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)",
-          border: "1px solid rgba(255,255,255,0.08)",
-        }}
-      >
-        <h3 className="text-sm font-medium mb-6" style={{ color: "#94a3b8" }}>
-          Distribución por categoría
-        </h3>
+      <div className="card p-6">
+        <ChartTitle n="A" title="Reparto por categoría" />
         <ResponsiveContainer width="100%" height={260}>
           <PieChart>
             <Pie
@@ -109,12 +96,13 @@ export default function CategoryChart({ subscriptions }: { subscriptions: Subscr
               cy="50%"
               innerRadius={65}
               outerRadius={100}
-              paddingAngle={3}
+              paddingAngle={0}
               dataKey="value"
-              strokeWidth={0}
+              stroke="var(--color-ink)"
+              strokeWidth={1.5}
             >
               {pieData.map((entry, index) => (
-                <Cell key={index} fill={entry.color} opacity={0.9} />
+                <Cell key={index} fill={entry.color} />
               ))}
             </Pie>
             <Tooltip content={<CustomTooltip />} />
@@ -122,7 +110,7 @@ export default function CategoryChart({ subscriptions }: { subscriptions: Subscr
               formatter={(value, entry) => {
                 const e = entry as { payload?: { label?: string } };
                 return (
-                  <span style={{ color: "#94a3b8", fontSize: 11 }}>
+                  <span style={{ color: "var(--color-ink-soft)", fontSize: 11, fontFamily: "var(--font-mono)" }}>
                     {e.payload?.label ?? value}
                   </span>
                 );
@@ -134,39 +122,31 @@ export default function CategoryChart({ subscriptions }: { subscriptions: Subscr
       </div>
 
       {/* Bar chart */}
-      <div
-        className="rounded-2xl p-6"
-        style={{
-          background: "linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)",
-          border: "1px solid rgba(255,255,255,0.08)",
-        }}
-      >
-        <h3 className="text-sm font-medium mb-6" style={{ color: "#94a3b8" }}>
-          Gasto mensual por categoría
-        </h3>
+      <div className="card p-6">
+        <ChartTitle n="B" title="Gasto mensual por categoría" />
         <ResponsiveContainer width="100%" height={260}>
           <BarChart data={barData} margin={{ top: 0, right: 0, left: -10, bottom: 0 }}>
             <CartesianGrid
               strokeDasharray="3 3"
-              stroke="rgba(255,255,255,0.05)"
+              stroke="rgba(23,21,15,0.15)"
               vertical={false}
             />
             <XAxis
               dataKey="name"
-              tick={{ fill: "#475569", fontSize: 10 }}
+              tick={{ fill: "var(--color-ink-soft)", fontSize: 10, fontFamily: "var(--font-mono)" }}
               axisLine={false}
               tickLine={false}
             />
             <YAxis
-              tick={{ fill: "#475569", fontSize: 11 }}
+              tick={{ fill: "var(--color-ink-faint)", fontSize: 11, fontFamily: "var(--font-mono)" }}
               axisLine={false}
               tickLine={false}
               tickFormatter={(v) => `${v}€`}
             />
-            <Tooltip content={<BarTooltip />} cursor={{ fill: "rgba(255,255,255,0.04)" }} />
-            <Bar dataKey="value" radius={[6, 6, 0, 0]}>
+            <Tooltip content={<BarTooltip />} cursor={{ fill: "rgba(255,225,74,0.35)" }} />
+            <Bar dataKey="value" radius={0} stroke="var(--color-ink)" strokeWidth={1.5}>
               {barData.map((entry, index) => (
-                <Cell key={index} fill={entry.color} opacity={0.85} />
+                <Cell key={index} fill={entry.color} />
               ))}
             </Bar>
           </BarChart>

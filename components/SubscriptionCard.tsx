@@ -18,101 +18,55 @@ export default function SubscriptionCard({ subscription, onEdit, onDelete }: Pro
   const monthlyPrice = toMonthlyPrice(subscription);
 
   return (
-    <div
-      className="group flex items-center gap-4 rounded-2xl p-4 transition-all card-hover cursor-default"
-      style={{
-        background: "rgba(255,255,255,0.03)",
-        border: "1px solid rgba(255,255,255,0.07)",
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.background = "rgba(255,255,255,0.06)";
-        e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.background = "rgba(255,255,255,0.03)";
-        e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)";
-      }}
-    >
-      {/* Icon */}
-      <div
-        className="w-11 h-11 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
-        style={{ background: `${meta.color}18`, border: `1px solid ${meta.color}30` }}
-      >
+    <div className="group relative flex items-center gap-3 border-b-[1.5px] border-dashed border-ink/25 bg-paper-2 py-4 pl-5 pr-3 transition-colors sm:gap-4 sm:px-4 sm:pl-6 hover:bg-[color-mix(in_srgb,var(--color-marker)_22%,var(--color-paper-2))]">
+      {/* Tinta de categoría */}
+      <span className="absolute inset-y-0 left-0 w-1.5" style={{ background: meta.color }} />
+
+      <div className="hidden h-10 w-10 flex-shrink-0 items-center justify-center border-[1.5px] border-ink bg-paper text-lg sm:flex">
         {meta.icon}
       </div>
 
-      {/* Info */}
-      <div className="flex-1 min-w-0">
-        <p className="font-semibold text-white text-sm truncate">{subscription.name}</p>
-        <div className="flex items-center gap-2 mt-0.5">
-          <span
-            className="text-xs px-2 py-0.5 rounded-full"
-            style={{
-              background: `${meta.color}18`,
-              color: meta.color,
-            }}
-          >
-            {meta.label}
-          </span>
+      <div className="min-w-0 flex-1">
+        <p className="truncate font-display text-base font-bold tracking-tight">
+          <span className="mr-1.5 sm:hidden">{meta.icon}</span>
+          {subscription.name}
+        </p>
+        <div className="mt-1 flex items-center gap-3">
+          <p className="label-mono truncate text-ink-faint">{meta.label}</p>
           {isUrgent && (
-            <span
-              className="text-xs px-2 py-0.5 rounded-full font-medium"
-              style={{ background: "rgba(245,158,11,0.15)", color: "#f59e0b" }}
-            >
-              {daysUntil === 0 ? "Hoy" : `${daysUntil}d`}
+            <span className="stamp flex-shrink-0 text-[10px]">
+              {daysUntil === 0 ? "Cobra hoy" : `En ${daysUntil}d`}
             </span>
           )}
         </div>
         {subscription.notes && (
-          <p className="text-xs mt-1 truncate" style={{ color: "#64748b" }}>
-            {subscription.notes}
-          </p>
+          <p className="mt-1 truncate text-xs text-ink-soft">{subscription.notes}</p>
         )}
       </div>
 
-      {/* Price */}
-      <div className="text-right flex-shrink-0">
-        <p className="font-bold text-white tabular-nums">{formatCurrency(monthlyPrice)}</p>
-        <p className="text-xs" style={{ color: "#475569" }}>
+      <div className="flex-shrink-0 text-right">
+        <p className="font-mono text-lg font-medium tabular-nums">{formatCurrency(monthlyPrice)}</p>
+        <p className="font-mono text-[11px] text-ink-faint">
           {subscription.frequency !== "monthly"
             ? `${formatCurrency(subscription.price)} / ${FREQUENCY_LABELS[subscription.frequency].toLowerCase()}`
             : "por mes"}
         </p>
       </div>
 
-      {/* Actions */}
-      <div
-        className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
-      >
+      <div className="flex flex-shrink-0 items-center gap-1 transition-opacity sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
         <button
           onClick={() => onEdit(subscription)}
-          className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors cursor-pointer"
-          style={{ color: "#64748b" }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = "rgba(52,211,153,0.14)";
-            e.currentTarget.style.color = "#a7f3d0";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = "transparent";
-            e.currentTarget.style.color = "#64748b";
-          }}
+          className="flex h-8 w-8 cursor-pointer items-center justify-center border-[1.5px] border-transparent text-ink-soft transition-colors hover:border-ink hover:bg-paper-2 hover:text-ink"
           title="Editar"
+          aria-label={`Editar ${subscription.name}`}
         >
           <Edit2 size={15} />
         </button>
         <button
           onClick={() => onDelete(subscription.id)}
-          className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors cursor-pointer"
-          style={{ color: "#64748b" }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = "rgba(239,68,68,0.2)";
-            e.currentTarget.style.color = "#ef4444";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = "transparent";
-            e.currentTarget.style.color = "#64748b";
-          }}
+          className="flex h-8 w-8 cursor-pointer items-center justify-center border-[1.5px] border-transparent text-ink-soft transition-colors hover:border-stamp hover:bg-stamp-soft hover:text-stamp"
           title="Eliminar"
+          aria-label={`Eliminar ${subscription.name}`}
         >
           <Trash2 size={15} />
         </button>

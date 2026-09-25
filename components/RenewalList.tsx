@@ -1,6 +1,5 @@
 "use client";
 
-import { Bell } from "lucide-react";
 import { Subscription } from "@/lib/types";
 import { getDaysUntilRenewal, formatCurrency } from "@/lib/calculations";
 import { CATEGORY_META } from "@/lib/constants";
@@ -14,71 +13,62 @@ export default function RenewalList({ subscriptions }: { subscriptions: Subscrip
     .slice(0, 5);
 
   return (
-    <div
-      className="rounded-2xl p-6"
-      style={{
-        background: "linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)",
-        border: "1px solid rgba(255,255,255,0.08)",
-      }}
-    >
-      <div className="flex items-center gap-2 mb-5">
-        <Bell size={16} style={{ color: "#f59e0b" }} />
-        <h3 className="text-sm font-semibold text-white">Próximas renovaciones</h3>
-        <span
-          className="text-xs px-2 py-0.5 rounded-full ml-auto"
-          style={{ background: "rgba(245,158,11,0.15)", color: "#f59e0b" }}
-        >
-          30 días
-        </span>
+    <div className="card p-5">
+      <div className="mb-4 flex items-center justify-between">
+        <h3 className="font-display text-lg font-bold tracking-tight">Próximos cobros</h3>
+        <span className="label-mono border-[1.5px] border-ink px-2 py-0.5">30 días</span>
       </div>
 
       {!upcoming.length ? (
-        <p className="text-sm text-center py-4" style={{ color: "#475569" }}>
-          No hay renovaciones próximas
+        <p className="py-4 text-center font-mono text-sm text-ink-faint">
+          Nada a la vista. Respira.
         </p>
       ) : (
-        <div className="space-y-3">
+        <ol className="divide-y-[1.5px] divide-dashed divide-ink/25">
           {upcoming.map((sub) => {
             const meta = CATEGORY_META[sub.category];
             const isUrgent = sub.days <= 3;
             const isNear = sub.days <= 7;
 
             return (
-              <div key={sub.id} className="flex items-center gap-3">
+              <li key={sub.id} className="flex items-center gap-3 py-3">
                 <div
-                  className="w-9 h-9 rounded-xl flex items-center justify-center text-base flex-shrink-0"
-                  style={{ background: `${meta.color}18` }}
+                  className={`flex h-12 w-12 flex-shrink-0 flex-col items-center justify-center border-[1.5px] font-mono leading-none ${
+                    isUrgent
+                      ? "border-stamp bg-stamp text-paper-2"
+                      : isNear
+                      ? "border-ink bg-marker text-ink"
+                      : "border-ink text-ink"
+                  }`}
                 >
-                  {meta.icon}
+                  {sub.days === 0 ? (
+                    <span className="text-[11px] font-medium uppercase">Hoy</span>
+                  ) : (
+                    <>
+                      <span className="text-lg font-medium tabular-nums">{sub.days}</span>
+                      <span className="mt-0.5 text-[9px] uppercase tracking-wider">días</span>
+                    </>
+                  )}
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-white truncate">{sub.name}</p>
-                  <p className="text-xs" style={{ color: "#475569" }}>
-                    {formatCurrency(sub.price)}{" "}
-                    {sub.frequency === "monthly"
-                      ? "/ mes"
-                      : sub.frequency === "annual"
-                      ? "/ año"
-                      : "/ trimestre"}
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-semibold">
+                    <span className="mr-1.5">{meta.icon}</span>
+                    {sub.name}
                   </p>
-                </div>
-                <div className="text-right flex-shrink-0">
-                  <p
-                    className="text-xs font-semibold"
-                    style={{
-                      color: isUrgent ? "#ef4444" : isNear ? "#f59e0b" : "#64748b",
-                    }}
-                  >
-                    {sub.days === 0 ? "Hoy" : `${sub.days}d`}
-                  </p>
-                  <p className="text-xs" style={{ color: "#334155" }}>
+                  <p className="font-mono text-xs text-ink-faint">
                     {formatShortISODate(sub.renewalDate)}
                   </p>
                 </div>
-              </div>
+                <p className="flex-shrink-0 font-mono text-sm tabular-nums">
+                  {formatCurrency(sub.price)}
+                  <span className="text-ink-faint">
+                    {sub.frequency === "monthly" ? "/m" : sub.frequency === "annual" ? "/a" : "/t"}
+                  </span>
+                </p>
+              </li>
             );
           })}
-        </div>
+        </ol>
       )}
     </div>
   );

@@ -15,6 +15,17 @@ Suscripscan es una herramienta web para controlar el gasto real de tus suscripci
 - Exportacion a CSV y PDF.
 - Datos guardados localmente en el navegador, sin cuentas ni servidor.
 
+## Identidad visual
+
+Suscripscan se diseña como **un tique de caja**: papel térmico, tinta negra y un sello de goma rojo.
+
+- **Paleta**: papel `#efe9dc`, tinta `#17150f`, sello `#e2361b`, carbón `#2743c4` (gastos puntuales) y fosforito `#ffe14a` para resaltar.
+- **Tipografía**: Bricolage Grotesque (titulares estrechos y pesados) + DM Mono (importes y etiquetas).
+- **Recursos gráficos**: bordes rasgados en zigzag, puntos guía entre concepto e importe, sellos ("EN 3D", "¡REVISAR!"), código de barras, sombras duras de tinta y un láser de escaneo en la portada.
+- **Categorías**: colores de tinta Risograph, legibles sobre papel.
+
+Los tokens y utilidades (`.card`, `.btn-*`, `.field`, `.stamp`, `.leader`, `.receipt-edge-*`) están en `app/globals.css`.
+
 ## Stack
 
 - Next.js 16

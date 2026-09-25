@@ -20,12 +20,13 @@ import FilterBar from "@/components/FilterBar";
 import ExportButton from "@/components/ExportButton";
 import MonthlyCalendar from "@/components/MonthlyCalendar";
 import BrandMark from "@/components/BrandMark";
+import Barcode from "@/components/Barcode";
 
 export default function DashboardPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center" style={{ background: "#09090f" }}>
-        <div className="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin" style={{ borderColor: "#34d399", borderTopColor: "transparent" }} />
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="label-mono animate-pulse text-ink-soft">Escaneando…</p>
       </div>
     }>
       <DashboardContent />
@@ -113,45 +114,36 @@ function DashboardContent() {
     return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
   }).reduce((acc, e) => acc + e.amount, 0);
 
+  const annual = monthly * 12;
+
   return (
-    <div className="min-h-screen premium-bg">
+    <div className="min-h-screen">
       {/* Top nav */}
-      <header
-        className="sticky top-0 z-40 border-b"
-        style={{ background: "rgba(7,10,14,0.84)", backdropFilter: "blur(18px)", borderColor: "rgba(255,255,255,0.08)" }}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center gap-3">
+      <header className="sticky top-0 z-40 border-b-[1.5px] border-ink bg-paper/90 backdrop-blur-md">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center gap-2 sm:gap-3">
           <Link
             href="/"
-            className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors flex-shrink-0"
-            style={{ color: "#475569" }}
-            onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.08)"; e.currentTarget.style.color = "#94a3b8"; }}
-            onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#475569"; }}
+            aria-label="Volver al inicio"
+            className="btn btn-quiet h-9 w-9 px-0 flex-shrink-0"
           >
             <ArrowLeft size={18} />
           </Link>
 
-          <BrandMark size="sm" />
+          <BrandMark size="sm" className="hidden min-[420px]:flex" />
 
           <div className="flex-1" />
 
-          {/* Monthly totals pill */}
-          <div
-            className="hidden sm:flex items-center gap-3 px-4 py-2 rounded-xl"
-            style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}
-          >
-            <div className="flex items-center gap-2">
-              <span className="text-xs" style={{ color: "#a7f3d0" }}>Suscripciones</span>
-              <span className="text-sm font-bold text-white tabular-nums">{formatCurrency(monthly)}</span>
+          {/* Monthly totals */}
+          <div className="hidden md:flex items-center gap-4 font-mono text-xs border-x-[1.5px] border-dashed border-ink/30 px-4">
+            <div className="flex items-baseline gap-2">
+              <span className="label-mono text-ink-faint">Suscr.</span>
+              <span className="text-sm font-medium tabular-nums">{formatCurrency(monthly)}</span>
             </div>
             {thisMonthExps > 0 && (
-              <>
-                <div style={{ width: 1, height: 16, background: "rgba(255,255,255,0.1)" }} />
-                <div className="flex items-center gap-2">
-                  <span className="text-xs" style={{ color: "#10b981" }}>Gastos</span>
-                  <span className="text-sm font-bold text-white tabular-nums">{formatCurrency(thisMonthExps)}</span>
-                </div>
-              </>
+              <div className="flex items-baseline gap-2">
+                <span className="label-mono text-ink-faint">Gastos</span>
+                <span className="text-sm font-medium tabular-nums text-carbon">{formatCurrency(thisMonthExps)}</span>
+              </div>
             )}
           </div>
 
@@ -159,12 +151,7 @@ function DashboardContent() {
             <button
               onClick={handleReset}
               title="Borrar todos los datos"
-              className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-all cursor-pointer"
-              style={{
-                background: resetConfirm ? "rgba(239,68,68,0.15)" : "rgba(255,255,255,0.05)",
-                color: resetConfirm ? "#ef4444" : "#475569",
-                border: resetConfirm ? "1px solid rgba(239,68,68,0.4)" : "1px solid rgba(255,255,255,0.08)",
-              }}
+              className={`btn px-3 ${resetConfirm ? "btn-danger" : "btn-quiet"}`}
             >
               <RotateCcw size={14} />
               <span className="hidden sm:inline">{resetConfirm ? "¿Confirmar?" : "Resetear"}</span>
@@ -177,29 +164,19 @@ function DashboardContent() {
             onImport={({ subscriptions: subs, expenses: exps }) => { setSubscriptions(subs); setExpenses(exps); }}
           />
 
-          {/* Add expense button */}
           <button
             onClick={() => { setEditingExp(null); setExpModalOpen(true); }}
-            className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold transition-all cursor-pointer"
-            style={{
-              background: "rgba(52,211,153,0.1)",
-              color: "#a7f3d0",
-              border: "1px solid rgba(52,211,153,0.22)",
-            }}
-            onMouseEnter={e => { e.currentTarget.style.background = "rgba(52,211,153,0.16)"; }}
-            onMouseLeave={e => { e.currentTarget.style.background = "rgba(52,211,153,0.1)"; }}
+            className="btn btn-ghost px-3"
+            title="Añadir gasto"
           >
             <Receipt size={15} />
             <span className="hidden sm:inline">Gasto</span>
           </button>
 
-          {/* Add subscription button */}
           <button
             onClick={() => { setEditingSub(null); setSubModalOpen(true); }}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all cursor-pointer"
-            style={{ background: "#6ee7b7", color: "#07100d", boxShadow: "0 10px 24px rgba(52,211,153,0.18)" }}
-            onMouseEnter={e => (e.currentTarget.style.opacity = "0.9")}
-            onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
+            className="btn btn-primary px-3 sm:px-4"
+            title="Añadir suscripción"
           >
             <Plus size={16} />
             <span className="hidden sm:inline">Añadir</span>
@@ -208,6 +185,18 @@ function DashboardContent() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+        <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+          <h1
+            className="font-display text-4xl font-extrabold leading-none tracking-[-0.03em] sm:text-5xl"
+            style={{ fontVariationSettings: '"wdth" 82' }}
+          >
+            Tu tique <span className="text-ink-faint">del mes</span>
+          </h1>
+          <p className="label-mono text-ink-faint" suppressHydrationWarning>
+            {now.toLocaleDateString("es-ES", { day: "2-digit", month: "short", year: "numeric" })} · Terminal local
+          </p>
+        </div>
+
         <ImpactPhrases subscriptions={subscriptions} />
 
         <section>
@@ -223,94 +212,79 @@ function DashboardContent() {
         </section>
 
         {/* Tabs + list */}
-        <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <section className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-4">
-            {/* Tab switcher */}
-            <div
-              className="flex gap-1 p-1 rounded-xl w-fit"
-              style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}
-            >
-              {([["subscriptions", "Suscripciones", subscriptions.length], ["expenses", "Gastos", expenses.length]] as const).map(([key, label, count]) => (
-                <button
-                  key={key}
-                  onClick={() => { setTab(key); setSearch(""); setFilter("all"); }}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer"
-                  style={{
-                    background: tab === key ? "rgba(255,255,255,0.08)" : "transparent",
-                    color: tab === key ? "#e2e8f0" : "#475569",
-                  }}
-                >
-                  {label}
-                  <span
-                    className="text-xs px-1.5 py-0.5 rounded-full tabular-nums"
-                    style={{ background: tab === key ? "rgba(255,255,255,0.1)" : "rgba(255,255,255,0.05)", color: tab === key ? "#94a3b8" : "#334155" }}
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+              {/* Tab switcher */}
+              <div className="flex w-fit border-[1.5px] border-ink bg-paper-2" role="tablist">
+                {([["subscriptions", "Suscripciones", subscriptions.length], ["expenses", "Gastos", expenses.length]] as const).map(([key, label, count], i) => (
+                  <button
+                    key={key}
+                    role="tab"
+                    aria-selected={tab === key}
+                    onClick={() => { setTab(key); setSearch(""); setFilter("all"); }}
+                    className={`flex h-10 cursor-pointer items-center gap-2 px-4 text-sm font-semibold transition-colors ${i > 0 ? "border-l-[1.5px] border-ink" : ""} ${
+                      tab === key ? "bg-ink text-paper-2" : "hover:bg-marker"
+                    }`}
                   >
-                    {count}
-                  </span>
-                </button>
-              ))}
-            </div>
+                    {label}
+                    <span className="font-mono text-xs tabular-nums opacity-60">{count}</span>
+                  </button>
+                ))}
+              </div>
 
-            {/* Search */}
-            <div
-              className="flex items-center gap-2 px-3 py-2 rounded-xl"
-              style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}
-            >
-              <Search size={15} style={{ color: "#475569" }} />
-              <input
-                type="text"
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-                placeholder={tab === "subscriptions" ? "Buscar suscripción..." : "Buscar gasto..."}
-                className="flex-1 bg-transparent text-sm text-white outline-none placeholder:text-[#334155]"
-              />
+              {/* Search */}
+              <label className="flex h-10 flex-1 items-center gap-2 border-[1.5px] border-ink bg-paper-2 px-3 focus-within:bg-[color-mix(in_srgb,var(--color-marker)_30%,var(--color-paper-2))]">
+                <Search size={15} className="text-ink-soft" />
+                <input
+                  type="text"
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                  placeholder={tab === "subscriptions" ? "Buscar suscripción..." : "Buscar gasto..."}
+                  className="flex-1 bg-transparent font-mono text-sm outline-none placeholder:text-ink-faint"
+                />
+              </label>
             </div>
 
             {tab === "subscriptions" && (
               <>
                 <FilterBar selected={filter} onChange={setFilter} />
-                <div className="flex items-center justify-between">
-                  <h2 className="text-sm font-semibold text-white">
-                    Suscripciones{" "}
-                    <span className="text-xs font-normal ml-1 px-2 py-0.5 rounded-full" style={{ background: "rgba(255,255,255,0.07)", color: "#64748b" }}>
-                      {filtered.length}
-                    </span>
+                <div className="flex items-center justify-between pt-2">
+                  <h2 className="label-mono text-ink-soft">
+                    {filtered.length} línea{filtered.length === 1 ? "" : "s"}
                   </h2>
                   {(filter !== "all" || search) && (
-                    <button onClick={() => { setFilter("all"); setSearch(""); }} className="text-xs cursor-pointer" style={{ color: "#a7f3d0" }}>
+                    <button onClick={() => { setFilter("all"); setSearch(""); }} className="label-mono cursor-pointer text-stamp underline underline-offset-4">
                       Limpiar filtros
                     </button>
                   )}
                 </div>
 
-                <div className="space-y-2">
-                  {filtered.length === 0 ? (
-                    <EmptyState
-                      icon="📭"
-                      title={subscriptions.length === 0 ? "No tienes suscripciones aún" : "Sin resultados"}
-                      subtitle={subscriptions.length === 0 ? "Añade tu primera suscripción para empezar" : "Prueba con otro filtro o búsqueda"}
-                    >
-                      {subscriptions.length === 0 && (
-                        <div className="flex gap-3 justify-center flex-wrap">
-                          <button
-                            onClick={() => { setEditingSub(null); setSubModalOpen(true); }}
-                            className="text-sm font-semibold px-5 py-2.5 rounded-xl text-white cursor-pointer"
-                            style={{ background: "#6ee7b7", color: "#07100d" }}
-                          >
-                            Añadir suscripción
-                          </button>
-                          <button
-                            onClick={() => setSubscriptions(loadDemoSubscriptions())}
-                            className="text-sm font-medium px-5 py-2.5 rounded-xl cursor-pointer"
-                            style={{ background: "rgba(255,255,255,0.06)", color: "#94a3b8", border: "1px solid rgba(255,255,255,0.1)" }}
-                          >
-                            Cargar ejemplos
-                          </button>
-                        </div>
-                      )}
-                    </EmptyState>
-                  ) : (
-                    filtered.map(sub => (
+                {filtered.length === 0 ? (
+                  <EmptyState
+                    title={subscriptions.length === 0 ? "Tique en blanco" : "Sin resultados"}
+                    subtitle={subscriptions.length === 0 ? "Añade tu primera suscripción para empezar a escanear" : "Prueba con otro filtro o búsqueda"}
+                  >
+                    {subscriptions.length === 0 && (
+                      <div className="flex gap-3 justify-center flex-wrap">
+                        <button
+                          onClick={() => { setEditingSub(null); setSubModalOpen(true); }}
+                          className="btn btn-primary"
+                        >
+                          Añadir suscripción
+                        </button>
+                        <button
+                          onClick={() => setSubscriptions(loadDemoSubscriptions())}
+                          className="btn btn-ghost"
+                        >
+                          Cargar ejemplos
+                        </button>
+                      </div>
+                    )}
+                  </EmptyState>
+                ) : (
+                  <div className="card overflow-hidden">
+                    {filtered.map(sub => (
                       <div key={sub.id} className="relative">
                         <SubscriptionCard subscription={sub} onEdit={handleEditSub} onDelete={handleDeleteSub} />
                         {deleteConfirm === sub.id && (
@@ -321,40 +295,35 @@ function DashboardContent() {
                           />
                         )}
                       </div>
-                    ))
-                  )}
-                </div>
+                    ))}
+                  </div>
+                )}
               </>
             )}
 
             {tab === "expenses" && (
               <>
-                <div className="flex items-center justify-between">
-                  <h2 className="text-sm font-semibold text-white">
-                    Gastos únicos{" "}
-                    <span className="text-xs font-normal ml-1 px-2 py-0.5 rounded-full" style={{ background: "rgba(255,255,255,0.07)", color: "#64748b" }}>
-                      {filteredExpenses.length}
-                    </span>
+                <div className="flex items-center justify-between pt-2">
+                  <h2 className="label-mono text-ink-soft">
+                    {filteredExpenses.length} gasto{filteredExpenses.length === 1 ? "" : "s"} único{filteredExpenses.length === 1 ? "" : "s"}
                   </h2>
                 </div>
 
-                <div className="space-y-2">
-                  {filteredExpenses.length === 0 ? (
-                    <EmptyState
-                      icon="🧾"
-                      title="No hay gastos registrados"
-                      subtitle="Añade gastos puntuales como cenas, gasolina o compras"
+                {filteredExpenses.length === 0 ? (
+                  <EmptyState
+                    title="No hay gastos registrados"
+                    subtitle="Añade gastos puntuales como cenas, gasolina o compras"
+                  >
+                    <button
+                      onClick={() => { setEditingExp(null); setExpModalOpen(true); }}
+                      className="btn btn-primary"
                     >
-                      <button
-                        onClick={() => { setEditingExp(null); setExpModalOpen(true); }}
-                        className="text-sm font-semibold px-5 py-2.5 rounded-xl text-white cursor-pointer"
-                        style={{ background: "#6ee7b7", color: "#07100d" }}
-                      >
-                        Añadir gasto
-                      </button>
-                    </EmptyState>
-                  ) : (
-                    filteredExpenses.map(exp => (
+                      Añadir gasto
+                    </button>
+                  </EmptyState>
+                ) : (
+                  <div className="card overflow-hidden">
+                    {filteredExpenses.map(exp => (
                       <div key={exp.id} className="relative">
                         <ExpenseRow expense={exp} onEdit={handleEditExp} onDelete={handleDeleteExp} />
                         {deleteConfirm === exp.id && (
@@ -365,33 +334,49 @@ function DashboardContent() {
                           />
                         )}
                       </div>
-                    ))
-                  )}
-                </div>
+                    ))}
+                  </div>
+                )}
               </>
             )}
           </div>
 
           {/* Sidebar */}
-          <div className="space-y-4">
+          <div className="space-y-8">
             <RenewalList subscriptions={subscriptions} />
 
-            <div
-              className="rounded-2xl p-5"
-              style={{ background: "linear-gradient(135deg, rgba(52,211,153,0.1) 0%, rgba(248,216,137,0.05) 100%)", border: "1px solid rgba(52,211,153,0.18)" }}
-            >
-              <p className="text-xs font-medium mb-4" style={{ color: "#a7f3d0" }}>Resumen financiero</p>
-              <div className="space-y-3">
-                <Row label="Suscripciones/mes" value={formatCurrency(getTotalMonthly(subscriptions))} color="#a7f3d0" />
-                <Row label="Gastos este mes" value={formatCurrency(thisMonthExps)} color="#34d399" />
-                <div className="border-t pt-3" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
-                  <Row label="Total este mes" value={formatCurrency(getTotalMonthly(subscriptions) + thisMonthExps)} color="#f8d889" />
+            {/* Resumen en forma de tique */}
+            <div className="receipt-shadow">
+              <div className="receipt-edge-y bg-paper-2 px-6 pb-9 pt-8 font-mono text-[13px]">
+                <p className="text-center label-mono text-ink-soft">Resumen financiero</p>
+                <hr className="rule-dashed my-4" />
+                <div className="space-y-2">
+                  <Row label="SUSCRIPCIONES/MES" value={formatCurrency(monthly)} />
+                  <Row label="GASTOS ESTE MES" value={formatCurrency(thisMonthExps)} className="text-carbon" />
                 </div>
-                <Row label="Gasto anual est." value={formatCurrency(getTotalMonthly(subscriptions) * 12)} color="#f59e0b" />
-                <div className="border-t pt-3" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
-                  <Row label="Nº suscripciones" value={String(subscriptions.length)} color="#64748b" />
-                  <Row label="Nº gastos" value={String(expenses.length)} color="#64748b" />
+                <div className="my-4 flex items-end justify-between border-y-2 border-ink py-2.5">
+                  <span className="font-medium">TOTAL MES</span>
+                  <span className="font-display text-2xl font-extrabold tabular-nums tracking-tight">
+                    {formatCurrency(monthly + thisMonthExps)}
+                  </span>
                 </div>
+                <div className="space-y-2 text-ink-soft">
+                  <Row label="GASTO ANUAL EST." value={formatCurrency(annual)} />
+                  <Row label="Nº SUSCRIPCIONES" value={String(subscriptions.length)} />
+                  <Row label="Nº GASTOS" value={String(expenses.length)} />
+                </div>
+                {annual > 0 && (
+                  <div className="mt-6 flex justify-center">
+                    <span className="stamp text-xs">
+                      {formatCurrency(annual)} / año
+                    </span>
+                  </div>
+                )}
+                <Barcode
+                  value={String(Math.round(monthly * 100)).padStart(8, "0")}
+                  className="mt-6 text-ink"
+                  height={38}
+                />
               </div>
             </div>
           </div>
@@ -417,24 +402,22 @@ function DashboardContent() {
   );
 }
 
-function Row({ label, value, color }: { label: string; value: string; color: string }) {
+function Row({ label, value, className = "" }: { label: string; value: string; className?: string }) {
   return (
-    <div className="flex items-center justify-between">
-      <span className="text-xs" style={{ color: "#64748b" }}>{label}</span>
-      <span className="text-sm font-bold tabular-nums" style={{ color }}>{value}</span>
+    <div className={`leader ${className}`}>
+      <span>{label}</span>
+      <span className="leader-fill" />
+      <span className="tabular-nums">{value}</span>
     </div>
   );
 }
 
-function EmptyState({ icon, title, subtitle, children }: { icon: string; title: string; subtitle: string; children?: React.ReactNode }) {
+function EmptyState({ title, subtitle, children }: { title: string; subtitle: string; children?: React.ReactNode }) {
   return (
-    <div
-      className="text-center py-16 rounded-2xl"
-      style={{ background: "rgba(255,255,255,0.02)", border: "1px dashed rgba(255,255,255,0.08)" }}
-    >
-      <p className="text-3xl mb-3">{icon}</p>
-      <p className="text-sm font-medium text-white mb-1">{title}</p>
-      <p className="text-xs mb-5" style={{ color: "#475569" }}>{subtitle}</p>
+    <div className="border-[1.5px] border-dashed border-ink/50 bg-paper-2/60 px-6 py-14 text-center">
+      <p className="stamp stamp-ink mb-5 text-xs">Vacío</p>
+      <p className="font-display text-xl font-bold tracking-tight">{title}</p>
+      <p className="mb-6 mt-1 font-mono text-xs text-ink-faint">{subtitle}</p>
       {children}
     </div>
   );
@@ -443,41 +426,27 @@ function EmptyState({ icon, title, subtitle, children }: { icon: string; title: 
 function ExpenseRow({ expense, onEdit, onDelete }: { expense: Expense; onEdit: (e: Expense) => void; onDelete: (id: string) => void }) {
   const meta = EXPENSE_CATEGORY_META[expense.category];
   return (
-    <div
-      className="flex items-center gap-4 px-4 py-3 rounded-2xl transition-all"
-      style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}
-    >
-      <div
-        className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-lg"
-        style={{ background: `${meta.color}18` }}
-      >
+    <div className="group relative flex items-center gap-4 border-b-[1.5px] border-dashed border-ink/25 bg-paper-2 px-4 py-3.5">
+      <span className="absolute inset-y-0 left-0 w-1.5" style={{ background: meta.color }} />
+      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center border-[1.5px] border-ink bg-paper text-lg">
         {meta.icon}
       </div>
-      <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-white truncate">{expense.name}</p>
-        <p className="text-xs mt-0.5" style={{ color: "#475569" }}>
+      <div className="min-w-0 flex-1">
+        <p className="truncate font-display text-base font-bold tracking-tight">{expense.name}</p>
+        <p className="label-mono mt-1 text-ink-faint">
           {meta.label} · {expense.date}
         </p>
       </div>
-      <span className="text-sm font-bold tabular-nums flex-shrink-0" style={{ color: "#34d399" }}>
+      <span className="flex-shrink-0 font-mono text-lg font-medium tabular-nums text-carbon">
         {formatCurrency(expense.amount)}
       </span>
       <div className="flex gap-1">
-        <button
-          onClick={() => onEdit(expense)}
-          className="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer"
-          style={{ color: "#64748b" }}
-          onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.08)"; e.currentTarget.style.color = "#94a3b8"; }}
-          onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#64748b"; }}
-        >
+        <button onClick={() => onEdit(expense)} className="btn btn-quiet h-8 px-2.5 text-xs">
           Editar
         </button>
         <button
           onClick={() => onDelete(expense.id)}
-          className="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer"
-          style={{ color: "#64748b" }}
-          onMouseEnter={e => { e.currentTarget.style.background = "rgba(239,68,68,0.1)"; e.currentTarget.style.color = "#ef4444"; }}
-          onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#64748b"; }}
+          className="btn btn-quiet h-8 px-2.5 text-xs hover:!bg-stamp-soft hover:!text-stamp"
         >
           Eliminar
         </button>
@@ -488,23 +457,12 @@ function ExpenseRow({ expense, onEdit, onDelete }: { expense: Expense; onEdit: (
 
 function DeleteOverlay({ name, onConfirm, onCancel }: { name: string; onConfirm: () => void; onCancel: () => void }) {
   return (
-    <div
-      className="absolute inset-0 rounded-2xl flex items-center justify-center gap-3 animate-fade-in"
-      style={{ background: "rgba(239,68,68,0.12)", border: "1px solid rgba(239,68,68,0.3)" }}
-    >
-      <p className="text-sm font-medium" style={{ color: "#fca5a5" }}>¿Eliminar {name}?</p>
-      <button
-        onClick={onConfirm}
-        className="text-sm font-semibold px-3 py-1.5 rounded-lg cursor-pointer"
-        style={{ background: "#ef4444", color: "white" }}
-      >
+    <div className="animate-fade-in absolute inset-0 flex flex-wrap items-center justify-center gap-3 bg-stamp-soft/95 px-3">
+      <p className="text-sm font-semibold text-stamp">¿Tachar {name}?</p>
+      <button onClick={onConfirm} className="btn btn-danger h-8 px-3 text-xs">
         Sí, eliminar
       </button>
-      <button
-        onClick={onCancel}
-        className="text-sm px-3 py-1.5 rounded-lg cursor-pointer"
-        style={{ background: "rgba(255,255,255,0.1)", color: "#94a3b8" }}
-      >
+      <button onClick={onCancel} className="btn btn-ghost h-8 px-3 text-xs">
         Cancelar
       </button>
     </div>
